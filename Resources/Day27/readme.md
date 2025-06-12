@@ -117,6 +117,37 @@ echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 sudo apt-get update
 sudo apt-get install -y kubelet=1.29.6-1.1 kubeadm=1.29.6-1.1 kubectl=1.29.6-1.1 --allow-downgrades --allow-change-held-packages
 sudo apt-mark hold kubelet kubeadm kubectl
+---
+# 1. Update package metadata
+sudo yum update -y
+
+# 2. Install required tools
+sudo yum install -y curl ca-certificates gnupg2
+
+# 3. Add Kubernetes YUM repository for v1.29
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
+EOF
+
+# 4. Update YUM cache
+sudo yum makecache -y
+
+# 5. Install specific Kubernetes versions
+sudo yum install -y kubelet-1.29.6 kubeadm-1.29.6 kubectl-1.29.6
+
+# 6. Enable kubelet
+sudo systemctl enable --now kubelet
+
+# 7. Optional: Prevent automatic upgrades (not via yum-mark, use version lock plugin)
+sudo yum install -y yum-plugin-versionlock
+sudo yum versionlock add kubelet kubeadm kubectl
+----
 
 kubeadm version
 kubelet --version
