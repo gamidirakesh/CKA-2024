@@ -202,6 +202,40 @@ sudo kubeadm join 172.31.71.210:6443 --token xxxxx --discovery-token-ca-cert-has
 ```
 kubeadm token create --print-join-command
 ```
+##### In master Node #####
+### copy the content in master node from below location in master node and paste in worker node
+[root@ip-172-31-82-105 ~]# cat $HOME/.kube/config
+
+##### In worker node ######
+##In worker node if we are not able connect to kubectl follow below steps in worker node
+
+[root@ip-172-31-89-221 ~]# mkdir -p $HOME/.kube
+[root@ip-172-31-89-221 ~]#
+[root@ip-172-31-89-221 ~]# ls -ltrh -a
+total 102M
+-rw-r--r--.  1 root root  129 Feb  2  2023 .tcshrc
+-rw-r--r--.  1 root root  100 Feb  2  2023 .cshrc
+-rw-r--r--.  1 root root  429 Feb  2  2023 .bashrc
+-rw-r--r--.  1 root root  141 Feb  2  2023 .bash_profile
+-rw-r--r--.  1 root root   18 Feb  2  2023 .bash_logout
+dr-xr-xr-x. 18 root root  237 Jun  7 06:55 ..
+drwx------.  2 root root   29 Jun 12 10:31 .ssh
+-rw-r--r--.  1 root root  46M Jun 12 11:26 containerd-1.7.14-linux-amd64.tar.gz
+-rw-r--r--.  1 root root  11M Jun 12 11:27 runc.amd64
+-rw-r--r--.  1 root root  46M Jun 12 11:27 cni-plugins-linux-amd64-v1.5.0.tgz
+-rw-------.  1 root root 3.0K Jun 12 11:35 .bash_history
+drwxr-xr-x.  2 root root    6 Jun 12 13:01 .kube
+dr-xr-x---.  4 root root  241 Jun 12 13:01 .
+
+[root@ip-172-31-89-221 ~]# cp -p /etc/kubernetes/kubelet.conf $HOME/.kube/
+[root@ip-172-31-89-221 ~]# cd /root/.kube/
+[root@ip-172-31-89-221 .kube]# ls -ltrh
+total 4.0K
+-rw-------. 1 root root 2.0K Jun 12 11:42 kubelet.conf
+[root@ip-172-31-89-221 .kube]#
+##### In worker node ######
+[root@ip-172-31-89-221 .kube]# vi config
+[root@ip-172-31-89-221 .kube]# kubectl get pods
 
 ## Validation
 
